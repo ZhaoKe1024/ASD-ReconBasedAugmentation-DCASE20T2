@@ -1,0 +1,13 @@
+.git
+*.pyc
+*/__pycache__
+/notebooks/
+/log/
+/run/
+*/log
+/runs/
+/results/
+/models/
+/datasets/
+/spec/
+/asdkit/models_deprecated/

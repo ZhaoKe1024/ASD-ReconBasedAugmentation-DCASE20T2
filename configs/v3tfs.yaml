@@ -1,0 +1,59 @@
+dev_directory : G:/DATAS-DCASE-ASD/DCASE2020Task2ASD/dataset
+eval_directory : G:/DATAS-DCASE-ASD/DCASE2020Task2ASD/eval_dataset
+#dev_directory : G:/DATAS-mini/dcase2020-asd-task2/data/dataset
+#eval_directory : G:/DATAS-mini/dcase2020-asd-task2/data/eval_dataset
+model_directory: ../models
+result_directory: ../results
+run_save_dir: "../run/V3TFS/"
+result_file: result.csv
+use_model: "ClassConvReconAE"  # "v3tfs"
+#score: "MAHALA"
+max_fpr : 0.1
+num_class: 23
+use_arcface: True
+sub_center: 1
+seed: 3407
+model:
+  input_dim: 128
+  input_length: 288
+  optimizer : adam
+  cls_lr: 0.001  #
+  recon_lr: 0.01
+  loss : cce
+  type_class_num: 6
+  mtid_class_num: 23
+
+  enable_amp: True
+  start_scheduler_epoch: 15
+  weight_decay: !!float 1e-5
+  # WarmupCosineSchedulerLR、CosineAnnealingLR
+  scheduler: 'WarmupCosineSchedulerLR'
+  min_lr: !!float 5e-5
+  max_lr: 0.001
+  warmup_epoch: 5
+
+feature:
+  sample_rate: 16000
+  wav_length: 147000
+  n_mels: 128
+  frames : 5
+  n_fft: 1024
+  hop_length: 512
+  power: 2.0
+
+augment:
+  speed_change: False  # if augment samples using speed change
+  edge_enhance: False  # if use edge enhancement
+  time_shift: False  # if augment samples using time shift
+  time_flip: False  # if augment samples using time flip(but i think it need not to di this, it's similar with time shift)
+  denosing: False  # if augment samples using denosing
+
+
+fit:
+  epochs : 30
+  recon_epochs: 40
+  batch_size : 64
+  shuffle : True
+  validation_split : 0.1
+  verbose : 1
+threshold_method: "gamma"  # "svm"
