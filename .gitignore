@@ -1,4 +1,6 @@
 .git
+*.png
+*.svg
 *.pyc
 */__pycache__
 /notebooks/

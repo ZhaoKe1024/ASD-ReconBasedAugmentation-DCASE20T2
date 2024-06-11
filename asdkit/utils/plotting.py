@@ -6,6 +6,8 @@
 # @Software: PyCharm
 """Visualize audio embeddings."""
 import os
+import random
+
 import librosa
 import numpy as np
 import torch
@@ -146,20 +148,23 @@ rgb_planning_23 = [
 # names = ["ToyCar", "ToyConveyor", "fan", "pump", "slider", "valve"]
 rgb_planning_6 = ["#800000", "#000075", "#dcbeff", "#ffe119", "#000000", "#f58231"]
 color_8 = [
-    "#000075", "#9A6324", "#000000", "#000075",
+    "#000075", "#9A6324", "#000000", "#5d1451",
     "#800000", "#f58231", "#ffe119", "#f032e6", ]
 def save_legend():
-    names = [f"origin_id-{i}" for i in range(4)]+[f"recon_id-{i}" for i in range(4)]
+    names = [f"normal_id-{i}" for i in range(4)]+[f"anomaly_id-{i}" for i in range(4)]
     params = {"format": "svg", "marker_size": 8, "alpha": 0.8}
     label = list(range(8))
     plt.figure(0)
-    for i in range(8):
-        plt.scatter(0, 0, s=params["marker_size"], c=color_8[label[i]], label=names[label[i]], alpha=params["alpha"])
+    for i in range(4):
+        plt.scatter(0, 0, marker='o', label=names[label[i]], color=color_8[label[i]+4])
+    for i in range(4):
+        plt.scatter(0, 0, marker='x', label=names[label[i+4]], color=color_8[label[i]+4])
     plt.xticks([])
     plt.yticks([])
     plt.legend(names, loc="upper right")
     plt.savefig("./legend_bar.svg", dpi=600, format=params["format"], bbox_inches="tight")
-    plt.close()
+    plt.show()
+    # plt.close()
 
 
 def plot_embedding_2D(data, label, title, savepath, names, params=None):
@@ -168,24 +173,32 @@ def plot_embedding_2D(data, label, title, savepath, names, params=None):
     # x_min, x_max = np.min(data, 0), np.max(data, 0)
     # data = (data - x_min) / (x_max - x_min)
     fig1 = plt.figure()
-
+    print(label)
     label_cnt = [1] * len(names)
     p_list = [None] * len(names)
     for i in range(data.shape[0]):
-        p = plt.scatter(data[i, 0], data[i, 1], s=params["marker_size"], c=color_8[label[i]], label=names[label[i]], alpha=params["alpha"])
+        # p = plt.scatter(data[i, 0], data[i, 1], s=params["marker_size"], c=rgb_planning_23[label[i]], alpha=params["alpha"])
+
+        if label[i] < 4:
+            p = plt.plot(data[i, 0], data[i, 1], marker='o', markersize=6, color=color_8[label[i]+4], label=names[label[i]])
+        else:
+            p = plt.plot(data[i, 0], data[i, 1], marker='x', markersize=14, color=color_8[label[i]],
+                         label=names[label[i]])
         if label_cnt[label[i]] == 1:
             p_list[label[i]] = p
             label_cnt[label[i]] = 0
-        # plt.plot(data[i, 0], data[i, 1], marker='o', markersize=1, color=color_8[label[i]])
+    print(p_list)
     plt.xticks([])
     plt.yticks([])
     # plt.title(title)
     # plt.legend(names, bbox_to_anchor=(1.05, 1), loc="upper right")
+    # plt.legend()
     # plt.legend(p_list, names, loc="lower right")
     # plt.savefig(savepath)
-    plt.savefig(savepath, dpi=600, format=params["format"], bbox_inches="tight")
-    plt.close()
+    # plt.savefig(savepath, dpi=600, format=params["format"], bbox_inches="tight")
+    # plt.close()
     # return fig1  # , fig2
+    plt.show()
 
 
 import pandas as pd

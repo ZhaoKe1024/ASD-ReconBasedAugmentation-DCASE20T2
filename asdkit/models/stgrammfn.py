@@ -6,9 +6,13 @@
 # @Software: PyCharm
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+import math
+from torch.nn import Parameter
+
 from asdkit.models.tdnn import TDNN_Extractor
-from asdkit.models.mobilefacenet import MobileFaceNet
 from asdkit.modules.loss import ArcMarginProduct
+from asdkit.modules.mobilefacenet import MobileFaceNet
 
 
 # original mobilefacenet setting
@@ -69,8 +73,8 @@ class STgramMFN(nn.Module):
                  bottleneck_setting=Mobilefacenet_bottleneck_setting,
                  use_arcface=False, m=0.5, s=30, sub=1):
         super(STgramMFN, self).__init__()
-        self.arcface = ArcMarginProduct(in_features=128, out_features=num_classes,
-                                        m=m, s=s, sub=sub) if use_arcface else use_arcface
+        # self.arcface = ArcMarginProduct(in_features=128, out_features=num_classes,
+        #                                 m=m, s=s, sub=sub) if use_arcface else use_arcface
         self.tgramnet = TDNN_Extractor(input_size=128, hidden_size=128, channels=128, embd_dim=128)
         # self.tgramnet = TgramNet(mel_bins=c_dim, win_len=win_len, hop_len=hop_len)
         self.mobilefacenet = MobileFaceNet(inp_c=2, num_class=num_classes,
@@ -84,15 +88,15 @@ class STgramMFN(nn.Module):
         # torch.Size([1, 160000]) torch.Size([1, 128, 344]) torch.Size([1])
         # shape wav mel label: torch.Size([1, 147000]) torch.Size([1, 128, 288]) torch.Size([1])
         # shape wav mel label: torch.Size([1, 147000]) torch.Size([1, 128, 288]) torch.Size([1])
-
+        # print("shape:", x_wav.shape, x_mel.shape)
         x_wav, x_mel = x_wav.unsqueeze(1), x_mel.unsqueeze(1)
         x_t = self.tgramnet(x_wav).unsqueeze(1)
-        print("shape:", x_t.shape, x_mel.shape)
+        # print("shape:", x_t.shape, x_mel.shape)
         x = torch.cat((x_mel, x_t), dim=1)
         # print("shape:", x.shape)
         out, feature = self.mobilefacenet(x, label)
-        if self.arcface:
-            out = self.arcface(feature, label)
+        # if self.arcface:
+        #     out = self.arcface(feature, label)
         return out, feature
 
 
