@@ -1,6 +1,14 @@
 English | [简体中文](./README_cn.md) 
 # AnomalousSoundDetection-Pytorch-KZ
 
+<h1 align="center">Reconstruction-Based Spectrogram Augmentation for Anomalous Sound Detection System</h1>
+
+<p align="center">
+    <strong>UCAS, Shenyang Institute of Computer Technology</strong>
+</p>
+
+Our paper "[Reconstruction-Based Spectrogram Augmentation for Anomalous Sound Detection System](https://ieeexplore.ieee.org/abstract/document/10942268)" accepted by ICCC2024!
+
 # Introduction of DCASE2020 Task2
 This Project is focuses on Anomalous Sound Detection based on Python(Pytorch), with the aim of detecting abnormal sounds from machines (such as the DCASE Challenge [DCASE2020 Task2](https://dcase.community/challenge2020/task-unsupervised-detection-of-anomalous-sounds)）.
 
@@ -86,6 +94,9 @@ ASD-ReconBasedAugmentation-dcase20t2
 │    └─train_list.txt
 ```
 
+
+
 # Reference
 1. https://github.com/yeyupiaoling/AudioClassification-Pytorch
 2. https://github.com/liuyoude/STgram-MFN
+3. The paper: Ke Zhao, et al., [Reconstruction-Based Spectrogram Augmentation for Anomalous Sound Detection System](https://ieeexplore.ieee.org/abstract/document/10942268)
